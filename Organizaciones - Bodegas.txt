@@ -1,0 +1,61 @@
+--Lista organizaciones a las que un el usuario tiene acceso
+ 
+SELECT hao.organization_id, hao.name
+FROM org_access oa
+,hr_all_organization_units hao
+WHERE hao.organization_id = oa.organization_id
+AND oa.resp_application_id = fnd_global.resp_appl_id
+AND oa.responsibility_id = fnd_global.resp_id
+;
+ 
+--Lista organizaciones e informacion:
+SELECT o.organization_id,o.name, hoi.org_information_context 
+FROM hr_all_organization_units o
+,hr_organization_information hoi
+WHERE hoi.organization_id = o.organization_id
+AND hoi.org_information_context = 'Accounting Information' 
+; 
+ 
+--Informacion unidad operativa:
+SELECT o.organization_id,o.name, hoi.org_information_context 
+  FROM hr_all_organization_units o
+    ,hr_organization_information hoi
+ WHERE hoi.organization_id = o.organization_id
+   AND hoi.org_information_context = 'Operating Unit Information' 
+; 
+
+
+--- Entidades legales de una Unidad Operativa
+SELECT xep.legal_entity_id,xep.name legal_entity_name
+  FROM hr_operating_units hou
+      ,xle_entity_profiles xep
+ WHERE hou.organization_id = 3193
+   AND hou.default_legal_context_id = xep.legal_entity_id;
+;  
+
+  
+  
+
+--- Organizaciones relacionadas a una entidad legal o unidad operativa
+-- Le pega a muchas tablas sirve para analizar
+SELECT *
+  FROM org_organization_definitions ood 
+ where ood.operating_unit = 3193
+    or ood.legal_entity = 33280;
+
+--- Organizaciones relacionadas a una entidad legal o unidad operativa
+-- Resumido
+SELECT mp.organization_id 
+      ,mp.organization_code organization_code
+      ,hoi.org_information2 legal_entity
+      ,hoi.org_information3 operation_unit
+      ,mp.attribute9 serie_doc
+  FROM mtl_parameters              mp
+      ,hr_organization_information hoi
+ WHERE mp.organization_id = hoi.organization_id
+   AND hoi.org_information_context = 'Accounting Information'
+   AND (hoi.org_information2 = '33280'
+        OR hoi.org_information3 = '3193'
+       )
+
+;             

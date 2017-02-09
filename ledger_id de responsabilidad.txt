@@ -1,0 +1,8 @@
+select 
+       t.profile_option_value --id del libro
+     
+  from FND_PROFILE_OPTION_VALUES t
+ where 1=1
+   and t.level_id = 10003 --perfil de sistema a nivel de responsabilidad
+   and t.profile_option_id = 1201 --Perfil GL_SET_OF_BKS_ID que es ID de Mayor de GL
+   and t.level_value = fnd_global.RESP_ID -- (in) Id de la responsabilidad

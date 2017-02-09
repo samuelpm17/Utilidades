@@ -1,0 +1,4 @@
+select fa.application_id, fa.application_short_name, fa.basepath,fa.*
+from fnd_application_all_view fa
+WHERE fa.APPLICATION_NAME = '&Application_name'
+order by fa.application_id;
